@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+
+
+  <arg name="path" default=""/>
+  <arg name="changeIdFrame" default="/talker/changes"/>
+	<node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+		<param name="resolution" value="0.05" />
+		
+		<!-- fixed map frame (set to 'map' if SLAM or localization running!) -->
+		<param name="frame_id" type="string" value="map" />
+		
+		<!-- maximum range to integrate (speedup!) -->
+		<param name="sensor_model/max_range" value="6" />
+		
+		<!-- data source to integrate (PointCloud2) -->
+		<!--remap from="cloud_in" to="/narrow_stereo/points_filtered2" /-->
+		<remap from="cloud_in" to="/camera/depth/color/points" />
+	</node>
+
+	<node pkg="tf" type="static_transform_publisher" name="om2cdof" args="0 0 0 0.5 -0.5 0.5 -0.5 /odom /camera_depth_optical_frame 1" />
+</launch>
